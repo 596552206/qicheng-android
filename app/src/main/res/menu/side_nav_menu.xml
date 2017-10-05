@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_forall"
+            android:icon="@drawable/icon_forall"
+            android:title="@string/forall" />
+        <item
+            android:id="@+id/nav_group"
+            android:icon="@drawable/icon_group"
+            android:title="@string/group" />
+        <item
+            android:id="@+id/nav_notice"
+            android:icon="@drawable/icon_notice"
+            android:title="@string/notice" />
+        <item
+            android:id="@+id/nav_mine"
+            android:icon="@drawable/icon_mine"
+            android:title="@string/mine" />
+        <item
+            android:id="@+id/nav_search"
+            android:icon="@drawable/icon_search"
+            android:title="@string/search" />
+    </group>
+
+    <item android:title="About us...">
+        <menu>
+            <item
+                android:id="@+id/nav_about"
+                android:icon="@drawable/icon_about"
+                android:title="@string/about" />
+            <item
+                android:id="@+id/nav_reward"
+                android:icon="@drawable/icon_reward"
+                android:title="@string/reward" />
+        </menu>
+    </item>
+
+</menu>

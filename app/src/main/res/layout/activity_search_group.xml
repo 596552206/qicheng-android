@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+
+    tools:context=".Activities.SearchGroupActivity"
+    android:weightSum="1">
+
+    <include layout="@layout/toolbar_all"/>
+
+   <RelativeLayout
+       android:layout_width="match_parent"
+       android:layout_height="match_parent">
+
+      <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:orientation="vertical">
+          <EditText
+              android:id="@+id/search_acv_groupid_tv"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_margin="@dimen/common_space_x4"
+              android:background="@drawable/round_et_bg"
+              android:padding="@dimen/common_space_x2"
+              android:singleLine="true"
+              android:textColorHint="@color/migold"
+              android:hint="小组ID"
+              android:inputType="number"/>
+
+          <EditText
+              android:id="@+id/search_acv_password_tv"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_margin="@dimen/common_space_x4"
+              android:background="@drawable/round_et_bg"
+              android:padding="@dimen/common_space_x2"
+              android:singleLine="true"
+              android:textColorHint="@color/migold"
+              android:hint="口令"
+              android:inputType="number"/>
+
+      </LinearLayout>
+       <Button
+           android:id="@+id/search_acv_submit_btn"
+           android:layout_width="match_parent"
+           android:layout_height="60dp"
+           android:background="@color/migold"
+           android:textColor="@color/light"
+           android:textSize="20sp"
+           android:text="加入"
+           android:layout_alignParentBottom="true"/>
+   </RelativeLayout>
+
+</LinearLayout>

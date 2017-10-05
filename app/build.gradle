@@ -1,0 +1,61 @@
+apply plugin: "com.android.application"
+
+android {
+    compileSdkVersion 24
+    buildToolsVersion '24'
+
+    defaultConfig {
+        applicationId "me.milechen.qicheng"
+        minSdkVersion 21
+        targetSdkVersion 24
+        versionCode 1
+        versionName "1.0"
+        multiDexEnabled true
+        manifestPlaceholders = [
+                GETUI_APP_ID    : "Dd7JnqTHjU9hQeSG0sPPyA",
+                GETUI_APP_KEY   : "IJwRAXu6v47PBWdXLipS35",
+                GETUI_APP_SECRET: "WvhQgVLjeM9MIt48GSbNy",
+                PACKAGE_NAME    : applicationId
+        ]
+        // 配置NDK
+        ndk {
+            // 生成so的名字，是必须的
+            moduleName = "JNIM"
+            // 生成不同abi体系的so库
+            abiFilters 'armeabi', 'armeabi-v7a', 'arm64-v8a',
+                    'x86', 'x86_64',
+                    'mips', 'mips64'
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    testCompile 'junit:junit:4.12'
+    //版本号使用 + 可以自动引用最新版
+    //版本号使用 + 可以自动引用最新版
+    //compile 'com.android.tools.build:gradle-experimental:0.7.0'
+    compile 'com.android.support:appcompat-v7:24.0.0'
+    compile 'com.android.support:design:24.0.0'
+    compile 'com.android.support:support-v4:24.0.0'
+    compile 'com.bigkoo:convenientbanner:2.0.5'
+    compile 'com.lzy.net:okhttputils:+'
+    compile 'com.lzy.net:okhttpserver:+'
+    compile 'com.zhy:flowlayout-lib:1.0.3'
+    compile 'com.google.code.gson:gson:+'
+    compile 'com.android.support:cardview-v7:24.0.0'
+    compile 'com.facebook.fresco:fresco:0.12.0'
+    compile 'com.google.android.gms:play-services-appindexing:8.1.0'
+    compile 'com.getui:sdk:2.+'
+    compile 'com.acker:simplezxing:1.5'
+    compile files('libs/core-3.2.1.jar')
+}

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp">
+
+    <TextView
+        android:id="@+id/item_discuss_nick_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Milestrete.Chen"
+        android:textColor="@color/brown"
+        android:textSize="16sp" />
+    <TextView
+        android:id="@+id/item_discuss_content_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="汝非我君，我非汝臣，何反之有？"
+        android:background="@drawable/text_bubble"
+        android:gravity="center_vertical"
+        android:maxWidth="250dp" />
+
+</LinearLayout>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="me.milechen.qicheng.Activities.CreateGroupActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <include layout="@layout/toolbar_all"/>
+
+        <EditText
+            android:id="@+id/create_group_acv_group_name_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/common_space_x4"
+            android:hint="小组名"
+            android:background="@drawable/round_et_bg"
+            android:padding="@dimen/common_space_x2"
+            android:singleLine="true"
+            android:maxLength="15"
+            android:textColorHint="@color/migold"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/create_group_acv_group_password_et"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/common_space_x4"
+                android:hint="四位数字口令"
+                android:background="@drawable/round_et_bg"
+                android:padding="@dimen/common_space_x2"
+                android:singleLine="true"
+                android:inputType="number"
+                android:maxLength="4"
+                android:textColorHint="@color/migold"/>
+            <Button
+                android:id="@+id/create_group_acv_group_password_randomize_btn"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:text="随机"
+                android:layout_alignParentRight="true"
+                android:layout_margin="@dimen/common_space_x4"
+                android:padding="@dimen/common_space_x2"
+                android:singleLine="true"
+                android:background="@color/none"
+                android:textColor="@color/ligold"/>
+        </RelativeLayout>
+
+        <TextView
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/common_space_x4"
+            android:padding="@dimen/common_space_x2"
+            android:text="@string/create_group_statement"
+            android:textColor="@color/ligold"
+            android:lineSpacingExtra="@dimen/common_space" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/create_group_acv_submit_btn"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/migold"
+        android:textColor="@color/light"
+        android:textSize="20sp"
+        android:text="创建"
+        android:layout_alignParentBottom="true"/>
+</RelativeLayout>

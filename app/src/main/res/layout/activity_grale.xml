@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:openDrawer="start">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context="me.milechen.qicheng.Activities.GraleActivity">
+
+        <include layout="@layout/toolbar_all"/>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/common_space"
+            android:layout_marginBottom="@dimen/common_space">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/toolbar_height"
+                android:paddingLeft="@dimen/common_space"
+                android:paddingRight="@dimen/common_space">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:id="@+id/grale_id_tv"
+                    android:textColor="@color/brown"
+                    android:gravity="center_vertical"
+                    android:textSize="18sp"
+                    android:singleLine="true"
+                    android:maxLength="15"
+                    android:layout_alignParentLeft="true"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:id="@+id/grale_info_tv"
+                    android:textColor="@color/ligold"
+                    android:text="信息>"
+                    android:textStyle="normal"
+                    android:textSize="18sp"
+                    android:gravity="center_vertical"
+                    android:layout_alignParentRight="true" />
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/grale_paras_rv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+            </android.support.v7.widget.RecyclerView>
+
+            <LinearLayout
+                android:id="@+id/grale_hintbar_l"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/toolbar_height"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/common_space"
+                android:layout_gravity="bottom"
+                android:background="@color/ligold">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="预热中。"
+                    android:textColor="@color/light"
+                    android:textSize="20sp"
+                    android:gravity="center_vertical"/>
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/grale_discuss_fg"
+        android:layout_gravity="right"></FrameLayout>
+
+</android.support.v4.widget.DrawerLayout>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/light">
+    <TextView
+        android:id="@+id/paras_popup_zan_tv"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:text="赞"
+        android:textSize="14sp"
+        android:gravity="center"/>
+    <TextView
+        android:id="@+id/paras_popup_review_tv"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:text="评论"
+        android:textSize="14sp"
+        android:gravity="center"/>
+    <TextView
+        android:id="@+id/paras_popup_vote_tv"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:text="投删"
+        android:textSize="14sp"
+        android:gravity="center"/>
+</LinearLayout>

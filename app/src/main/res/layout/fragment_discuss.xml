@@ -1,0 +1,89 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Fragments.DiscussFragment"
+    android:orientation="vertical"
+    android:gravity="top">
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/toolbar_height"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:textColor="@color/brown"
+            android:textStyle="normal"
+            android:background="@color/light"
+            android:layout_gravity="center"
+            android:text="@string/discuss" />
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/fgdiscuss_speeches_rv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="@color/light"></android.support.v7.widget.RecyclerView>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/ligold">
+
+        <EditText
+            android:id="@+id/fgdiscuss_speeches_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="说点什么 ^ω^ "
+            android:paddingRight="50dp"
+            android:paddingLeft="@dimen/common_space"
+            android:paddingTop="0dp"
+            android:textColor="@color/light"
+            android:textSize="18sp"
+            android:textColorHint="@color/light"
+            android:textColorHighlight="@color/ligold"
+            android:background="@null"
+            android:layout_gravity="center"
+            android:minHeight="48dp"
+
+            android:lineSpacingExtra="@dimen/common_space"
+            />
+
+        <EditText
+            android:id="@+id/fgdiscuss_at_tv"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/toolbar_height"
+            android:background="@color/gray"
+            android:text=""
+            android:textColor="@color/migold"
+            android:textSize="16sp"
+            android:gravity="center_vertical"
+            android:maxWidth="96dp"
+            android:singleLine="true"
+            android:layout_gravity="left"
+            android:paddingLeft="@dimen/common_space"
+            android:layout_alignParentLeft="true"
+            android:visibility="invisible"
+            android:focusable="false"
+            android:inputType="textNoSuggestions"/>
+
+        <Button
+            android:id="@+id/fgdiscuss_speeches_btn"
+            android:layout_width="@dimen/toolbar_height"
+            android:layout_height="@dimen/toolbar_height"
+            android:background="@color/migold"
+            android:text="吐"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:textColor="@color/light"
+            android:layout_gravity="right"
+            />
+    </FrameLayout>
+
+</LinearLayout>
