@@ -99,15 +99,14 @@
 
 
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="match_parent">
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/tale_paras_rv"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1">
+                android:layout_marginBottom="@dimen/toolbar_height">
 
             </android.support.v7.widget.RecyclerView>
 
@@ -117,7 +116,7 @@
                 android:layout_height="@dimen/toolbar_height"
                 android:orientation="horizontal"
                 android:paddingLeft="@dimen/common_space"
-                android:layout_gravity="bottom"
+                android:layout_alignParentBottom="true"
                 android:background="@color/ligold">
                 <TextView
                     android:layout_width="match_parent"
@@ -127,7 +126,17 @@
                     android:textSize="20sp"
                     android:gravity="center_vertical"/>
             </LinearLayout>
-        </LinearLayout>
+
+            <com.wang.avi.AVLoadingIndicatorView
+                android:id="@+id/tale_loading_avi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                zhy:indicatorName="LineScaleIndicator"
+                zhy:indicatorColor="@color/migold"
+                android:layout_centerInParent="true"
+                style="@style/AVLoadingIndicatorView.Large"
+                />
+        </RelativeLayout>
 
 
     </LinearLayout>

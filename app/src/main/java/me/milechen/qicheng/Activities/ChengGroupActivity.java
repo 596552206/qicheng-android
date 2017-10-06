@@ -29,7 +29,6 @@ import okhttp3.Response;
 
 public class ChengGroupActivity extends AppCompatActivity {
 
-    private int paraNum;
     private int group;
     private int user;
 
@@ -50,7 +49,6 @@ public class ChengGroupActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         Bundle bundleFromGrale = intent.getExtras();
-        this.paraNum = bundleFromGrale.getInt("para");
         this.group = bundleFromGrale.getInt("group");
         this.user = getSharedPreferences("user", MODE_PRIVATE).getInt("id", -1);
 
@@ -60,14 +58,14 @@ public class ChengGroupActivity extends AppCompatActivity {
         content = (EditText) findViewById(R.id.cheng_content_et);
 
         cheng.setText(R.string.cheng);
-        title.setText("续写第" + this.paraNum + "段");
+        title.setText("续写下一段");
         cheng.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(content.getText().toString().length()>=1){
                     doCheng();
                 }else{
-                    Toast.makeText(ChengGroupActivity.this,"不要耍我哦...",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ChengGroupActivity.this,"至少写一个字吧...",Toast.LENGTH_SHORT).show();
                 }
             }
         });

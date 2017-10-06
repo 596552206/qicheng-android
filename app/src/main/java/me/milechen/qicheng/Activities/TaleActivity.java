@@ -31,6 +31,7 @@ import android.widget.Toast;
 import com.igexin.sdk.GTServiceManager;
 import com.igexin.sdk.PushManager;
 import com.lzy.okhttputils.callback.StringCallback;
+import com.wang.avi.AVLoadingIndicatorView;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
 import com.zhy.view.flowlayout.TagFlowLayout;
@@ -75,6 +76,7 @@ public class TaleActivity extends AppCompatActivity implements ParasAdapter.MyIt
     private RecyclerView recyclerView;
     private ParasAdapter parasAdapter;
     public ArrayList<ParaBean> paras = new ArrayList<>();
+    private int lastPara;
     private boolean isLoadingMore = false;
     //private CoordinatorLayout coor;
     private LinearLayout hintBar;
@@ -89,6 +91,7 @@ public class TaleActivity extends AppCompatActivity implements ParasAdapter.MyIt
     private int status;
     private DiscussFragment discussFragment;
     private TextView tucao;
+    private AVLoadingIndicatorView avi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,6 +143,7 @@ public class TaleActivity extends AppCompatActivity implements ParasAdapter.MyIt
         recyclerView = (RecyclerView) findViewById(R.id.tale_paras_rv);
         //coor = (CoordinatorLayout) findViewById(R.id.tale_coor);
         hintBar = (LinearLayout) findViewById(R.id.tale_hintbar_l);
+        avi = (AVLoadingIndicatorView) findViewById(R.id.tale_loading_avi);
 
         dialog = new Dialog(this,R.style.BottomDialog);
         dialogView = LayoutInflater.from(this).inflate(R.layout.paras_popup_dialog,null);
@@ -187,7 +191,7 @@ public class TaleActivity extends AppCompatActivity implements ParasAdapter.MyIt
         });
 
         fetchBar(true);
-        fetchParas(0,10);
+        //fetchParas(0,10);
 
         ((QichengApplication)getApplication()).handlerForTaleActivity = this.taleHandler;
 
@@ -218,6 +222,7 @@ public class TaleActivity extends AppCompatActivity implements ParasAdapter.MyIt
                 ResponseUtil.decodeResponseWithCertainTaleData(s).investigate(new ResponseInvestigator<TaleBean>() {
                     @Override
                     public void onOK(int status, String detail, TaleBean data) {
+                        lastPara = data.getParaNumber();
                         showBar(data,showFocus);
                     }
                     @Override
@@ -231,6 +236,7 @@ public class TaleActivity extends AppCompatActivity implements ParasAdapter.MyIt
 
     public void fetchParas(final int paraNumAfter, int limit){
             isLoadingMore = true;
+            avi.smoothToShow();
             paraNetUtil.fetchParas(id, paraNumAfter, limit, new StringCallback() {
                 @Override
                 public void onSuccess(String s, Call call, Response response) {
@@ -239,14 +245,16 @@ public class TaleActivity extends AppCompatActivity implements ParasAdapter.MyIt
                         public void onOK(int status, String detail, List<ParaBean> data) {
                             paras.addAll(data);
                             parasAdapter.notifyDataSetChanged();
-                            if(paraNumAfter!=0)recyclerView.smoothScrollToPosition(paraNumAfter-1);
+                            if(paraNumAfter!=0)recyclerView.smoothScrollToPosition(paraNumAfter);
                             isLoadingMore = false;
+                            avi.smoothToHide();
                         }
 
                         @Override
                         public void onErr(int status, String detail) {
                             isNoMore = true;
                             isLoadingMore = false;
+                            avi.hide();
                         }
                     });
                 }
@@ -277,6 +285,8 @@ public class TaleActivity extends AppCompatActivity implements ParasAdapter.MyIt
         tagFlowLayout.setOnTagClickListener(new TagFlowLayout.OnTagClickListener() {
             @Override
             public boolean onTagClick(View view, int position, FlowLayout parent) {
+
+                //TODO tags click listener
                 Toast.makeText(TaleActivity.this,tags.get(position).getName()+"被点击",Toast.LENGTH_SHORT).show();
                 return false;
             }
@@ -614,7 +624,7 @@ public class TaleActivity extends AppCompatActivity implements ParasAdapter.MyIt
                 Intent intent1 = new Intent();
                 intent1.setClass(TaleActivity.this,ChengActivity.class);
                 Bundle bundle1 = new Bundle();
-                bundle1.putInt("para",paras.get(paras.size()-1).getParanum()+1);
+                bundle1.putInt("para",lastPara+1);
                 bundle1.putInt("tale",id);
                 intent1.putExtras(bundle1);
                 TaleActivity.this.startActivityForResult(intent1,2, ActivityOptions.makeSceneTransitionAnimation(TaleActivity.this).toBundle());
@@ -622,6 +632,8 @@ public class TaleActivity extends AppCompatActivity implements ParasAdapter.MyIt
         });
 
         hintBar.addView(btn);
+
+        fetchParas((paras.size()==0)?0:(paras.get(paras.size()-1).getParanum()),10);
     }
 
     private void hint_silent(){
@@ -699,7 +711,7 @@ public class TaleActivity extends AppCompatActivity implements ParasAdapter.MyIt
         final TextView tv = new TextView(this);
         tv.setTextColor(getResources().getColor(R.color.light));
         tv.setTextSize(20);
-        tv.setText("末段被民主删除。");
+        tv.setText("末段已被投票删除。");
         tv.setGravity(Gravity.CENTER_VERTICAL);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT);
         tv.setLayoutParams(params);

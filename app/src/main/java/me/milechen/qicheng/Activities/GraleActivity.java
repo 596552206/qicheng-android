@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.igexin.sdk.GActivity;
 import com.lzy.okhttputils.callback.StringCallback;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,6 +69,7 @@ public class GraleActivity extends AppCompatActivity implements GParasAdapter.On
     private LinearLayout hintBar;
     private TextView groupIdTV;
     private TextView groupInfoTV;
+    private AVLoadingIndicatorView avi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +89,7 @@ public class GraleActivity extends AppCompatActivity implements GParasAdapter.On
         groupIdTV = (TextView) findViewById(R.id.grale_id_tv);
         groupInfoTV = (TextView) findViewById(R.id.grale_info_tv);
         title = (TextView) findViewById(R.id.toolbar_title_tv);
+        avi = (AVLoadingIndicatorView) findViewById(R.id.grale_loading_avi);
 
 
         tucao.setText(R.string.discuss);
@@ -174,6 +177,8 @@ public class GraleActivity extends AppCompatActivity implements GParasAdapter.On
     }
 
     public void fetchParas(final int paraNumAfter, int limit) {
+        avi.smoothToShow();
+        isLoadingMore = true;
         paraNetUtil.fetchGPara(groupId, paraNumAfter, limit, new StringCallback() {
             @Override
             public void onSuccess(String s, Call call, Response response) {
@@ -182,14 +187,17 @@ public class GraleActivity extends AppCompatActivity implements GParasAdapter.On
                     public void onOK(int status, String detail, List<GParaBean> data) {
                         paras.addAll(data);
                         parasAdapter.notifyDataSetChanged();
-                        if (paraNumAfter != 0) recyclerView.smoothScrollToPosition(paraNumAfter-1);
                         isLoadingMore = false;
+                        if(paraNumAfter!=0)layoutManager.smoothScrollToPosition(recyclerView,null,paraNumAfter);
+                        avi.smoothToHide();
+
                     }
 
                     @Override
                     public void onErr(int status, String detail) {
                         isNoMore = true;
                         isLoadingMore = false;
+                        avi.hide();
                     }
                 });
             }
@@ -282,7 +290,7 @@ public class GraleActivity extends AppCompatActivity implements GParasAdapter.On
                 Intent intent1 = new Intent();
                 intent1.setClass(GraleActivity.this,ChengGroupActivity.class);
                 Bundle bundle1 = new Bundle();
-                bundle1.putInt("para",(!paras.isEmpty())?(paras.get(paras.size()-1).getParanum()+1):(1));
+                //bundle1.putInt("para",(!paras.isEmpty())?(paras.get(paras.size()-1).getParanum()+1):(1));
                 bundle1.putInt("group",groupId);
                 intent1.putExtras(bundle1);
                 GraleActivity.this.startActivityForResult(intent1,2, ActivityOptions.makeSceneTransitionAnimation(GraleActivity.this).toBundle());

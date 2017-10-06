@@ -66,7 +66,7 @@ public class ChengActivity extends AppCompatActivity {
                 if(content.getText().toString().length()>=1){
                     doCheng();
                 }else{
-                    Toast.makeText(ChengActivity.this,"不要耍我哦...",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ChengActivity.this,"至少写一个字吧...",Toast.LENGTH_SHORT).show();
                 }
             }
         });
