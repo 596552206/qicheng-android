@@ -2,6 +2,7 @@ package me.milechen.qicheng.Activities;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -10,7 +11,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
@@ -32,11 +32,11 @@ import me.milechen.qicheng.Adapters.GroupAdapter;
 import me.milechen.qicheng.Beans.GroupBean;
 import me.milechen.qicheng.Beans.QRCodeGroupData;
 import me.milechen.qicheng.Fragments.SideNavFragment;
+import me.milechen.qicheng.R;
 import me.milechen.qicheng.Utils.ModuleConst;
 import me.milechen.qicheng.Utils.Net.GroupNetUtil;
 import me.milechen.qicheng.Utils.Net.ResponseInvestigator;
 import me.milechen.qicheng.Utils.Net.ResponseUtil;
-import me.milechen.qicheng.R;
 import me.milechen.qicheng.Utils.QRCodeTranslator;
 import okhttp3.Call;
 import okhttp3.Response;
@@ -92,7 +92,6 @@ public class GroupActivity extends AppCompatActivity implements SideNavFragment.
 
         this.user = getSharedPreferences("user",MODE_PRIVATE).getInt("id",-1);
         fetchGroups();
-
     }
 
     private void fetchGroups(){

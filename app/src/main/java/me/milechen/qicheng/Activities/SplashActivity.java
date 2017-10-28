@@ -1,16 +1,19 @@
 package me.milechen.qicheng.Activities;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.util.Log;
+import android.webkit.WebView;
 
 import com.igexin.sdk.PushManager;
 
+import me.milechen.qicheng.R;
 import me.milechen.qicheng.Services.PushService;
 import me.milechen.qicheng.Services.QichengIntentService;
+import me.milechen.qicheng.Utils.Net.ByetCookieUtil;
 import me.milechen.qicheng.Utils.User.LoginUtil;
-import me.milechen.qicheng.R;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -18,6 +21,10 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+
+        Log.i("ii","try cookie");
+        new ByetCookieUtil().copeByetHost((WebView) findViewById(R.id.wbv_for_byet_cookie_invisible));
+
 
         switch (LoginUtil.isLogin(this)){
             case 0 :

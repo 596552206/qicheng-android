@@ -22,20 +22,21 @@ import com.lzy.okhttputils.callback.StringCallback;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.milechen.qicheng.Activities.MainActivity;
+import me.milechen.qicheng.Activities.TaleActivity;
 import me.milechen.qicheng.Adapters.TaleListAdapter;
 import me.milechen.qicheng.Beans.TaleBean;
+import me.milechen.qicheng.R;
 import me.milechen.qicheng.Utils.Net.ResponseInvestigator;
 import me.milechen.qicheng.Utils.Net.ResponseUtil;
 import me.milechen.qicheng.Utils.Net.TaleNetUtil;
 import me.milechen.qicheng.Utils.RecyclerViewDivider;
 import me.milechen.qicheng.Utils.TimeManager;
-import me.milechen.qicheng.Activities.MainActivity;
-import me.milechen.qicheng.Activities.TaleActivity;
-import me.milechen.qicheng.R;
 import okhttp3.Call;
 import okhttp3.Response;
 
-import static android.support.v7.widget.RecyclerView.*;
+import static android.support.v7.widget.RecyclerView.LayoutManager;
+import static android.support.v7.widget.RecyclerView.OnScrollListener;
 
 
 /**

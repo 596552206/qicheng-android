@@ -12,8 +12,6 @@ import com.igexin.sdk.message.GTCmdMessage;
 import com.igexin.sdk.message.GTTransmitMessage;
 import com.lzy.okhttputils.callback.StringCallback;
 
-import me.milechen.qicheng.Activities.GroupActivity;
-import me.milechen.qicheng.Activities.TaleActivity;
 import me.milechen.qicheng.QichengApplication;
 import me.milechen.qicheng.Utils.Net.UserNetUtil;
 import okhttp3.Call;

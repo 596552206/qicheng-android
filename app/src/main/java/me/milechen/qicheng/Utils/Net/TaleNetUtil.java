@@ -1,7 +1,5 @@
 package me.milechen.qicheng.Utils.Net;
 
-import android.support.annotation.Nullable;
-
 import com.google.gson.Gson;
 import com.lzy.okhttputils.OkHttpUtils;
 import com.lzy.okhttputils.cache.CacheMode;

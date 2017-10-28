@@ -4,15 +4,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,17 +16,13 @@ import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 
-import me.milechen.qicheng.Activities.GroupActivity;
 import me.milechen.qicheng.Activities.UserActivity;
-import me.milechen.qicheng.Beans.UserBean;
 import me.milechen.qicheng.R;
 import me.milechen.qicheng.Utils.ModuleConst;
 
 
 public class SideNavFragment extends Fragment implements NavigationView.OnNavigationItemSelectedListener {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private int selectedModule = -1;
 
     private NavigationView navigationView;

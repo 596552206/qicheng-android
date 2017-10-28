@@ -27,7 +27,6 @@ public class MainFragment extends Fragment {
     }
 
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteractionBannerClicked(int position);
     }
 }

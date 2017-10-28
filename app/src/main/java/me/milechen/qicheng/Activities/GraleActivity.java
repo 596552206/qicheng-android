@@ -2,13 +2,13 @@ package me.milechen.qicheng.Activities;
 
 import android.app.ActivityOptions;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -19,9 +19,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.igexin.sdk.GActivity;
 import com.lzy.okhttputils.callback.StringCallback;
 import com.wang.avi.AVLoadingIndicatorView;
 
@@ -29,9 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.milechen.qicheng.Adapters.GParasAdapter;
-import me.milechen.qicheng.Adapters.ParasAdapter;
 import me.milechen.qicheng.Beans.GParaBean;
-import me.milechen.qicheng.Beans.ParaBean;
 import me.milechen.qicheng.Fragments.DiscussFragment;
 import me.milechen.qicheng.QichengApplication;
 import me.milechen.qicheng.R;

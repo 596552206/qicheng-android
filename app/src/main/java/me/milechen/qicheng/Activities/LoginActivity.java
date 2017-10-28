@@ -2,8 +2,8 @@ package me.milechen.qicheng.Activities;
 
 import android.content.Intent;
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.transition.Explode;
@@ -19,13 +19,13 @@ import com.igexin.sdk.PushManager;
 import com.lzy.okhttputils.callback.StringCallback;
 
 import me.milechen.qicheng.Beans.UserBean;
+import me.milechen.qicheng.R;
 import me.milechen.qicheng.Services.PushService;
 import me.milechen.qicheng.Services.QichengIntentService;
 import me.milechen.qicheng.Utils.Net.ResponseInvestigator;
 import me.milechen.qicheng.Utils.Net.ResponseUtil;
 import me.milechen.qicheng.Utils.Net.UserNetUtil;
 import me.milechen.qicheng.Utils.User.LoginUtil;
-import me.milechen.qicheng.R;
 import okhttp3.Call;
 import okhttp3.Response;
 

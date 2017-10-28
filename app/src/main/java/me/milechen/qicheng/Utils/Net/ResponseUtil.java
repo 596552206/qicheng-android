@@ -1,8 +1,9 @@
 package me.milechen.qicheng.Utils.Net;
 
+import android.content.Context;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-
 
 import java.util.List;
 
@@ -24,7 +25,14 @@ public class ResponseUtil{
     获取故事列表返回
      */
     public static ResponseBean<List<TaleBean>> decodeResponseWithTaleBeanData(String json){
-        return new Gson().fromJson(json,new TypeToken<ResponseBean<List<TaleBean>>>(){}.getType());
+        if(ResponseCoper.isJson(json)) {
+            return new Gson().fromJson(json, new TypeToken<ResponseBean<List<TaleBean>>>() {
+            }.getType());
+        }else {
+            //new ResponseCoper().cope(json);
+            return ResponseCoper.getIllegalFormResponseBean();
+        }
+
     }
 
     /*
@@ -111,7 +119,29 @@ public class ResponseUtil{
 
 
 }
+class ResponseCoper{
+    //*****************合法性判段******
+    public static boolean isJson(String s){
+        if(s.matches("[\\{|\\[].+[\\}|\\]]")){
+            return true;
+        }else {
+            return false;
+        }
+    }
 
+    public void cope(String s,Context context){
+        if(s.matches("This site requires Javascript to work")){
+            //copeByetHost(context);
+        }
+    }
+
+    public static ResponseBean getIllegalFormResponseBean(){
+        ResponseBean responseBean = new ResponseBean();
+        responseBean.status = 333;
+        responseBean.detail = "非法格式";
+        return responseBean;
+    }
+}
 
 
 

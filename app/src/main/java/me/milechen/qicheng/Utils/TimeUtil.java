@@ -1,7 +1,5 @@
 package me.milechen.qicheng.Utils;
 
-import android.util.Log;
-
 import java.text.SimpleDateFormat;
 
 /**

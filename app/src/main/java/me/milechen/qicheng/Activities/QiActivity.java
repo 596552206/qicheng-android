@@ -1,8 +1,8 @@
 package me.milechen.qicheng.Activities;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.transition.Explode;
 import android.util.Log;
@@ -23,12 +23,12 @@ import java.util.List;
 import java.util.Set;
 
 import me.milechen.qicheng.Beans.TagBean;
+import me.milechen.qicheng.R;
 import me.milechen.qicheng.Utils.Net.ResponseInvestigator;
 import me.milechen.qicheng.Utils.Net.ResponseUtil;
 import me.milechen.qicheng.Utils.Net.TagNetUtil;
 import me.milechen.qicheng.Utils.Net.TaleNetUtil;
 import me.milechen.qicheng.Utils.TimeManager;
-import me.milechen.qicheng.R;
 import okhttp3.Call;
 import okhttp3.Response;
 

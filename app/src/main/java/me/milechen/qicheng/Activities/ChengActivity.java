@@ -1,27 +1,22 @@
 package me.milechen.qicheng.Activities;
 
-import android.content.Context;
 import android.content.Intent;
-import android.security.keystore.KeyInfo;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.transition.Explode;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lzy.okhttputils.callback.StringCallback;
 
+import me.milechen.qicheng.R;
 import me.milechen.qicheng.Utils.Net.ParaNetUtil;
 import me.milechen.qicheng.Utils.Net.ResponseInvestigator;
 import me.milechen.qicheng.Utils.Net.ResponseUtil;
-import me.milechen.qicheng.R;
 import me.milechen.qicheng.Utils.Net.TaleNetUtil;
 import okhttp3.Call;
 import okhttp3.Response;
