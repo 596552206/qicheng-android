@@ -68,6 +68,13 @@ public class SideNavFragment extends Fragment implements NavigationView.OnNaviga
 
         this.avatarView.setImageURI(this.userAvatar);
         this.nickView.setText(this.userNick);
+        this.nickView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), UserActivity.class);
+                getActivity().startActivity(intent);
+            }
+        });
 
         this.navigationView.setNavigationItemSelectedListener(this);
         this.navigationView.getHeaderView(0).setOnClickListener(new View.OnClickListener() {

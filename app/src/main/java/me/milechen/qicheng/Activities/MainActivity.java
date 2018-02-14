@@ -73,10 +73,10 @@ public class MainActivity extends AppCompatActivity
         TextView title = (TextView) findViewById(R.id.toolbar_title_tv);
         heat_tv = (TextView) findViewById(R.id.main_heat_tv);
         latest_tv = (TextView) findViewById(R.id.main_latest_tv);
-        tags_tv = (TextView) findViewById(R.id.main_tags_tv);
+        //tags_tv = (TextView) findViewById(R.id.main_tags_tv);
         tabLine = (ImageView) findViewById(R.id.id_tab_line_iv);
         viewPager = (ViewPager) findViewById(R.id.vp_main);
-        snackbar = (CoordinatorLayout) findViewById(R.id.main_acv_snackbar_coord);
+        snackbar = (CoordinatorLayout) findViewById(R.id.col_main_main);
         drawer = (DrawerLayout) findViewById(R.id.main_drawer_layout);
 
         fragInit();
@@ -119,11 +119,11 @@ public class MainActivity extends AppCompatActivity
 
         heatMainFragment = new HeatMainFragment();
         latestMainFragment = new LatestMainFragment();
-        tagsMainFragment = new TagsMainFragment();
+        //tagsMainFragment = new TagsMainFragment();
 
         fragmentList.add(heatMainFragment);
         fragmentList.add(latestMainFragment);
-        fragmentList.add(tagsMainFragment);
+        //fragmentList.add(tagsMainFragment);
 
         fragmentAdapter = new FragmentAdapter(this.getSupportFragmentManager(),fragmentList);
 
@@ -154,13 +154,13 @@ public class MainActivity extends AppCompatActivity
 
         heat_tv.setOnClickListener(this);
         latest_tv.setOnClickListener(this);
-        tags_tv.setOnClickListener(this);
+        //tags_tv.setOnClickListener(this);
     }
 
     public void resetLights(){
         heat_tv.setTextColor(getResources().getColor(R.color.migold));
         latest_tv.setTextColor(getResources().getColor(R.color.migold));
-        tags_tv.setTextColor(getResources().getColor(R.color.migold));
+        //tags_tv.setTextColor(getResources().getColor(R.color.migold));
     }
 
     public void lightUp(int pos){
@@ -172,9 +172,9 @@ public class MainActivity extends AppCompatActivity
             case 1:
                 latest_tv.setTextColor(getResources().getColor(R.color.brown));
                 break;
-            case 2:
-                tags_tv.setTextColor(getResources().getColor(R.color.brown));
-                break;
+            //case 2:
+            //    tags_tv.setTextColor(getResources().getColor(R.color.brown));
+            //    break;
         }
     }
 
@@ -182,7 +182,7 @@ public class MainActivity extends AppCompatActivity
         LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) tabLine
                 .getLayoutParams();
 
-        lp.leftMargin = (int) ( position * (screenWidth / 3) + (offset) * (screenWidth / 3));
+        lp.leftMargin = (int) (position * (screenWidth / 2) + (offset) * (screenWidth / 2));
 
         tabLine.setLayoutParams(lp);
     }
@@ -194,7 +194,7 @@ public class MainActivity extends AppCompatActivity
         screenWidth = dpMetrics.widthPixels;
         LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) tabLine
                 .getLayoutParams();
-        lp.width = screenWidth / 3;
+        lp.width = screenWidth / 2;
         tabLine.setLayoutParams(lp);
     }
 
@@ -212,9 +212,9 @@ public class MainActivity extends AppCompatActivity
             case R.id.main_latest_tv:
                 viewPager.setCurrentItem(1);
                 break;
-            case R.id.main_tags_tv:
-                viewPager.setCurrentItem(2);
-                break;
+            //case R.id.main_tags_tv:
+            //    viewPager.setCurrentItem(2);
+            //    break;
             case R.id.toolbar_right_tv:
                 jumpToQi();
         }

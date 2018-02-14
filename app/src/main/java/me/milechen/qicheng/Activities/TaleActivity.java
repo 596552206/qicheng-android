@@ -24,6 +24,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lzy.okhttputils.callback.StringCallback;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.wang.avi.AVLoadingIndicatorView;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
@@ -55,7 +59,6 @@ public class TaleActivity extends AppCompatActivity implements ParasAdapter.MyIt
     private int id;
     private int pos;
     private int user;
-    private TaleBean tale;
     private Toolbar toolbar;
     private TagFlowLayout tagFlowLayout;
     private TaleNetUtil taleNetUtil;
@@ -65,11 +68,10 @@ public class TaleActivity extends AppCompatActivity implements ParasAdapter.MyIt
     private TextView time;
     private TextView zanAndPara;
     private RecyclerView recyclerView;
+    private RefreshLayout refreshLayout;
     private ParasAdapter parasAdapter;
     public ArrayList<ParaBean> paras = new ArrayList<>();
     private int lastPara;
-    private boolean isLoadingMore = false;
-    //private CoordinatorLayout coor;
     private LinearLayout hintBar;
     private Dialog dialog;
     private View dialogView;
@@ -116,6 +118,7 @@ public class TaleActivity extends AppCompatActivity implements ParasAdapter.MyIt
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
         toolbar.setNavigationIcon(R.mipmap.back);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -132,7 +135,7 @@ public class TaleActivity extends AppCompatActivity implements ParasAdapter.MyIt
         time = (TextView) findViewById(R.id.tale_time_tv);
         zanAndPara = (TextView) findViewById(R.id.tale_zanandpara_tv);
         recyclerView = (RecyclerView) findViewById(R.id.tale_paras_rv);
-        //coor = (CoordinatorLayout) findViewById(R.id.tale_coor);
+        refreshLayout = (RefreshLayout) findViewById(R.id.tale_paras_srl);
         hintBar = (LinearLayout) findViewById(R.id.tale_hintbar_l);
         avi = (AVLoadingIndicatorView) findViewById(R.id.tale_loading_avi);
 
@@ -151,38 +154,33 @@ public class TaleActivity extends AppCompatActivity implements ParasAdapter.MyIt
         dialog.getWindow().setGravity(Gravity.BOTTOM);
         dialog.getWindow().setWindowAnimations(R.style.BottomDialog_Animation);
         dialog.setCanceledOnTouchOutside(true);
-        //dialog.show();
 
         parasAdapter = new ParasAdapter(paras);
         parasAdapter.setOnLongClickListener(this);
         final RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(parasAdapter);
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                int lastPosition = ((LinearLayoutManager)layoutManager).findLastVisibleItemPosition();
-                Log.i("ii",lastPosition+"");
-                if(newState == RecyclerView.SCROLL_STATE_IDLE && lastPosition ==parasAdapter.getItemCount()-1){
-                    if(isLoadingMore){
-                        Log.i("ii","isLoading");
-                    }
-                    if(!isLoadingMore){
-                        Log.i("ii","notLoading");
-                        fetchParas(paras.get(paras.size()-1).getParanum(),3);
-                    }
-                }
-            }
 
+        refreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
+            public void onRefresh(RefreshLayout refreshlayout) {
+                refreshlayout.finishRefresh(2000);
+                Log.i("ii", "正在刷新");
+                paras.clear();
+                fetchParas((paras.size() == 0) ? 0 : (paras.get(paras.size() - 1).getParanum()), 10);
+                parasAdapter.notifyDataSetChanged();
+            }
+        });
+        refreshLayout.setOnLoadmoreListener(new OnLoadmoreListener() {
+            @Override
+            public void onLoadmore(RefreshLayout refreshlayout) {
+                refreshlayout.finishLoadmore(2000);
+                Log.i("ii", "正在加载");
+                fetchParas(paras.get(paras.size() - 1).getParanum(), 8);
             }
         });
 
         fetchBar(true);
-        //fetchParas(0,10);
 
         ((QichengApplication)getApplication()).handlerForTaleActivity = this.taleHandler;
 
@@ -226,8 +224,6 @@ public class TaleActivity extends AppCompatActivity implements ParasAdapter.MyIt
     }
 
     public void fetchParas(final int paraNumAfter, int limit){
-            isLoadingMore = true;
-            avi.smoothToShow();
             paraNetUtil.fetchParas(id, paraNumAfter, limit, new StringCallback() {
                 @Override
                 public void onSuccess(String s, Call call, Response response) {
@@ -236,15 +232,11 @@ public class TaleActivity extends AppCompatActivity implements ParasAdapter.MyIt
                         public void onOK(int status, String detail, List<ParaBean> data) {
                             paras.addAll(data);
                             parasAdapter.notifyDataSetChanged();
-                            if(paraNumAfter!=0)recyclerView.smoothScrollToPosition(paraNumAfter);
-                            isLoadingMore = false;
-                            avi.smoothToHide();
+                            avi.hide();
                         }
 
                         @Override
                         public void onErr(int status, String detail) {
-                            isNoMore = true;
-                            isLoadingMore = false;
                             avi.hide();
                         }
                     });
@@ -255,7 +247,6 @@ public class TaleActivity extends AppCompatActivity implements ParasAdapter.MyIt
 
 
     public void showBar(TaleBean tale,boolean showFocus){
-        this.tale = tale;
         showTags(tale.getTagSet());
         if(showFocus)showFocus();
         showSponsor(tale.getSponsorNick());
@@ -483,43 +474,6 @@ public class TaleActivity extends AppCompatActivity implements ParasAdapter.MyIt
         dialog.dismiss();
     }
 
-
-//    private void refreshAll(int limit){
-//        //Log.i("ii","toushanhoushuaxin");
-//        paraNetUtil.fetchParas(id, 0, limit, new StringCallback() {
-//            @Override
-//            public void onSuccess(String s, Call call, Response response) {
-//                ResponseUtil.decodeResponseWithParaBeanData(s).investigate(new ResponseInvestigator<List<ParaBean>>() {
-//                    @Override
-//                    public void onOK(int status, String detail, List<ParaBean> data) {
-//                        paras.clear();
-//                        paras.addAll(data);
-//                        parasAdapter.notifyDataSetChanged();
-//                        recyclerView.smoothScrollToPosition(parasAdapter.getItemCount()-1);
-//                    }
-//
-//                    @Override
-//                    public void onErr(int status, String detail) {
-//
-//                    }
-//                });
-//            }
-//        });
-//        isNoMore = false;
-//        isLoadingMore = false;
-//    }
-
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        if(requestCode == 2 && resultCode == 2){//ChengActivity
-//            int lastPos = ((LinearLayoutManager)recyclerView.getLayoutManager()).findLastVisibleItemPosition();
-//            isNoMore = false;
-//            fetchParas(paras.get(lastPos).getParanum(),1);
-//            recyclerView.scrollToPosition(lastPos+1);
-//            fetchBar();
-//        }
-//    }
 
     @Override
     public void onBackPressed() {

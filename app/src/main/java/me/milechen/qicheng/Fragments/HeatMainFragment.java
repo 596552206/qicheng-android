@@ -24,6 +24,9 @@ import com.bigkoo.convenientbanner.holder.CBViewHolderCreator;
 import com.bigkoo.convenientbanner.holder.Holder;
 import com.bigkoo.convenientbanner.listener.OnItemClickListener;
 import com.lzy.okhttputils.callback.StringCallback;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -58,12 +61,11 @@ public class HeatMainFragment extends MainFragment implements OnItemClickListene
     
 
     private ConvenientBanner convenientBanner;
-    private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
+    private RefreshLayout refreshLayout;
     private TaleListAdapter taleListAdapter;
     private ArrayList<String> heatTitleList = new ArrayList<String>();
     private ArrayList<TaleBean> heatTalesList = new ArrayList<TaleBean>();
-    private boolean isLoadingMore = false;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,10 +74,8 @@ public class HeatMainFragment extends MainFragment implements OnItemClickListene
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_heat_main, container, false);
-        //convenientBanner = new ConvenientBanner(getContext());
-        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.fgheat_srl);
+        refreshLayout = (RefreshLayout) view.findViewById(R.id.fgheat_srl);
         recyclerView = (RecyclerView) view.findViewById(R.id.fgheat_heat_rv);
         return view;
     }
@@ -86,19 +86,20 @@ public class HeatMainFragment extends MainFragment implements OnItemClickListene
 
         updateData(TimeManager.getInstance().getServiceTime());
 
-        swipeRefreshLayout.setColorSchemeResources(R.color.green,R.color.red,R.color.blue,R.color.violet);
-        swipeRefreshLayout.setSize(SwipeRefreshLayout.LARGE);
-        swipeRefreshLayout.setProgressBackgroundColor(R.color.light);
-        swipeRefreshLayout.setProgressViewEndTarget(true,100);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        refreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
-            public void onRefresh() {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                       updateData(TimeManager.getInstance().getServiceTime());
-                    }
-                }).start();
+            public void onRefresh(RefreshLayout refreshlayout) {
+                refreshlayout.finishRefresh(2000);
+                Log.i("ii", "正在刷新");
+                updateData(TimeManager.getInstance().getServiceTime());
+            }
+        });
+        refreshLayout.setOnLoadmoreListener(new OnLoadmoreListener() {
+            @Override
+            public void onLoadmore(RefreshLayout refreshlayout) {
+                refreshlayout.finishLoadmore(2000);
+                Log.i("ii", "正在加载");
+                handler.sendEmptyMessageDelayed(3, 500);
             }
         });
 
@@ -109,31 +110,11 @@ public class HeatMainFragment extends MainFragment implements OnItemClickListene
 
         final LayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(taleListAdapter);
-        recyclerView.addItemDecoration(new RecyclerViewDivider(getContext(),LinearLayoutManager.HORIZONTAL,14,getResources().getColor(R.color.gray)));
-        recyclerView.addOnScrollListener(new OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                int lastPosition = ((LinearLayoutManager)layoutManager).findLastVisibleItemPosition();
-                if(newState == RecyclerView.SCROLL_STATE_IDLE && lastPosition ==taleListAdapter.getItemCount()-1){
-                    if(isLoadingMore){
-                        Log.i("ii","isLoading");
-                    }
-                    if(!isLoadingMore){
-                        Log.i("ii","notLoading");
-                        isLoadingMore = true;
-                        handler.sendEmptyMessageDelayed(3,500);
-                    }
-                }
-            }
 
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-            }
-        });
         setHeaderView(recyclerView);
+
+        recyclerView.setAdapter(taleListAdapter);
+        recyclerView.addItemDecoration(new RecyclerViewDivider(getContext(), LinearLayoutManager.HORIZONTAL, 14, getResources().getColor(R.color.gray)));
 
         ((MainActivity)getActivity()).handlerForHeatF = this.handler;
 
@@ -178,7 +159,6 @@ public class HeatMainFragment extends MainFragment implements OnItemClickListene
 
     @Override
     public void onItemClick(View view, int pos) {
-        //Toast.makeText(getContext(),heatTalesList.get(pos).getId()+"isClicked",Toast.LENGTH_SHORT).show();
         Intent intent = new Intent();
         Bundle bundle = new Bundle();
         bundle.putInt("id",heatTalesList.get(pos).getId());
@@ -237,6 +217,22 @@ public class HeatMainFragment extends MainFragment implements OnItemClickListene
         }
     }
 
+    private void updateBanner() {
+        if (heatTitleList.isEmpty()) {
+            if (heatTalesList.size() > 0) {
+                heatTitleList.clear();
+                for (int i = 0; i < 4; i++) {
+                    String p1 = heatTalesList.get(i).getParaOne();
+                    String title = (p1.length() >= 20) ? p1.substring(0, 20) + "..." : p1;
+                    heatTitleList.add(i, title);
+                }
+                Log.i("ii", "更新了banner" + heatTitleList.size());
+                convenientBanner.notifyDataSetChanged();
+            }
+        }
+
+    }
+
     private void updateData(long timeBefore){
         heatTalesList.clear();
         final TaleNetUtil taleNetUtil = new TaleNetUtil();
@@ -247,9 +243,7 @@ public class HeatMainFragment extends MainFragment implements OnItemClickListene
                 ResponseUtil.decodeResponseWithTaleBeanData(s).investigate(new ResponseInvestigator<List<TaleBean>>() {
                     @Override
                     public void onOK(int status, String detail, List<TaleBean> data) {
-                        for (TaleBean tale:data) {
-                            heatTalesList.add(tale);
-                        }
+                        heatTalesList.addAll(data);
                         handler.sendEmptyMessage(1);
                     }
 
@@ -261,17 +255,11 @@ public class HeatMainFragment extends MainFragment implements OnItemClickListene
             }
         });
 
-
-        heatTitleList.clear();
-        heatTitleList.add(TimeManager.getInstance().getServiceTime()+"很久很久以前");
-        heatTitleList.add(new Date()+"hihihi");
-        heatTitleList.add(new Date()+"hohoho");
-
     }
 
     private void loadMore(long timeBefore){
         TaleNetUtil taleNetUtil = new TaleNetUtil();
-        taleNetUtil.fetchHotTales(timeBefore, 10, new StringCallback() {
+        taleNetUtil.fetchHotTales(timeBefore, 8, new StringCallback() {
             @Override
             public void onSuccess(String s, Call call, Response response) {
                 Log.i("ii", response.headers().toString());
@@ -280,17 +268,14 @@ public class HeatMainFragment extends MainFragment implements OnItemClickListene
                     public void onOK(int status, String detail, List<TaleBean> data) {
                         for (TaleBean tale:data) {
                             heatTalesList.add(tale);
-                            //Log.i("ii",tale.getTagSet().get(0).getName());
                         }
                         taleListAdapter.notifyDataSetChanged();
-                        isLoadingMore = false;
                     }
 
                     @Override
                     public void onErr(int status, String detail) {
                         Log.i("ii", detail);
                         Toast.makeText(getContext(),"没有更多...",Toast.LENGTH_LONG).show();
-                        isLoadingMore = false;
                     }
                 });
             }
@@ -323,10 +308,8 @@ public class HeatMainFragment extends MainFragment implements OnItemClickListene
             super.handleMessage(msg);
             switch (msg.what) {
                 case 1://下拉
-                    //swipeRefreshLayout.setRefreshing(false);
                     taleListAdapter.notifyDataSetChanged();
-                    //swipeRefreshLayout.setEnabled(false);
-                    swipeRefreshLayout.setRefreshing(false);
+                    updateBanner();
                     break;
                 case 2:// Activity请求更新
                     updateData(TimeManager.getInstance().getServiceTime());

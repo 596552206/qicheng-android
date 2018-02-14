@@ -5,6 +5,7 @@ package me.milechen.qicheng.Utils.Net;
  */
 public class Urls {
     public static final String ROOT = "http://qicheng.milez.ml/";
+    //public static final String ROOT = "http://192.168.31.207/~mile/qicheng/";
 
     public static final String GET_HOT_TALE_VIEW = ROOT+"index.php/Api/Tale/getHotTaleView";
     public static final String GET_LATEST_TALE_VIEW = ROOT+"index.php/Api/Tale/getLatestTaleView";
@@ -17,6 +18,7 @@ public class Urls {
     public static final String GET_NICK_BY_PHONE = ROOT+"index.php/Api/User/getNickByPhone";
     public static final String LOGIN = ROOT+"index.php/Api/User/login";
     public static final String UPDATE_CLIENT_ID = ROOT+"index.php/Api/User/updateClientId";
+    public static final String REGISTER = ROOT + "index.php/Api/User/newUser";
 
     public static final String GET_TALE = ROOT+"index.php/Api/Tale/getCertainTaleView";
     public static final String IS_USER_FOCUS_TALE = ROOT+"index.php/Api/Tale/isUserFocusTale";

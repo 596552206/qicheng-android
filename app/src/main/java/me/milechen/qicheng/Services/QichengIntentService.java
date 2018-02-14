@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.igexin.sdk.GTIntentService;
 import com.igexin.sdk.message.GTCmdMessage;
+import com.igexin.sdk.message.GTNotificationMessage;
 import com.igexin.sdk.message.GTTransmitMessage;
 import com.lzy.okhttputils.callback.StringCallback;
 
@@ -21,8 +22,6 @@ import okhttp3.Response;
  * Created by mile on 2017/8/9.
  */
 public class QichengIntentService extends GTIntentService {
-
-
     @Override
     public IBinder onBind(Intent intent) {
         Log.i("ii","OnBind");
@@ -68,6 +67,7 @@ public class QichengIntentService extends GTIntentService {
         sendMessage(code,data);
     }
 
+
     @Override
     public void onReceiveOnlineState(Context context, boolean b) {
 
@@ -76,6 +76,15 @@ public class QichengIntentService extends GTIntentService {
     @Override
     public void onReceiveCommandResult(Context context, GTCmdMessage gtCmdMessage) {
 
+    }
+
+
+    @Override
+    public void onNotificationMessageArrived(Context context, GTNotificationMessage msg) {
+    }
+
+    @Override
+    public void onNotificationMessageClicked(Context context, GTNotificationMessage msg) {
     }
 
     private void sendMessage(int code,String data){

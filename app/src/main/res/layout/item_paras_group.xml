@@ -9,7 +9,7 @@
     android:orientation="vertical"
     android:paddingLeft="@dimen/common_space_x2"
     android:paddingRight="@dimen/common_space_x2"
-    android:paddingTop="0dp"
+    android:paddingTop="@dimen/common_space"
     android:paddingBottom="@dimen/common_space">
     <TextView
         android:layout_width="match_parent"

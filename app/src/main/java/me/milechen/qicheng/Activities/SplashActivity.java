@@ -22,6 +22,7 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
+        //TODO:这里是针对byethost限制的破解。
         Log.i("ii","try cookie");
         new ByetCookieUtil().copeByetHost((WebView) findViewById(R.id.wbv_for_byet_cookie_invisible));
 

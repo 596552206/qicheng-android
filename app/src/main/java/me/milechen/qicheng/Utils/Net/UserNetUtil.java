@@ -36,4 +36,13 @@ public class UserNetUtil {
                 .params("clientid",clientId)
                 .execute(callback);
     }
+
+    public void register(String phone, String nick, String password, StringCallback callback) {
+        OkHttpUtils.post(Urls.REGISTER)
+                .tag(this)
+                .params("phone", phone)
+                .params("nick", nick)
+                .params("password", password)
+                .execute(callback);
+    }
 }

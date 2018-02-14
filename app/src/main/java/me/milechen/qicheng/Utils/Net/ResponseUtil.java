@@ -138,7 +138,7 @@ class ResponseCoper{
     public static ResponseBean getIllegalFormResponseBean(){
         ResponseBean responseBean = new ResponseBean();
         responseBean.status = 333;
-        responseBean.detail = "非法格式";
+        responseBean.detail = "服务器异常╮(╯▽╰)╭该杀一个程序员祭天了。";
         return responseBean;
     }
 }

@@ -9,6 +9,8 @@ import android.webkit.WebViewClient;
 import com.lzy.okhttputils.OkHttpUtils;
 import com.lzy.okhttputils.model.HttpHeaders;
 
+import java.util.ArrayList;
+
 /**
  * Created by mile on 2017/10/22.
  */
@@ -38,10 +40,18 @@ public class ByetCookieUtil {
         webView.setWebViewClient(new MyWebviewClient());
     }
     public String getCookie(String s){
-        int b = s.indexOf("=");
-        int e = s.indexOf(";");
-        if(e>=0)return s.substring(b+1,e);
-        return s.substring(b+1);
+        s = s.replace(" ", "");//好吧终于找到原因了，因为这前面又一个，，，空格。。。。MDZZ！！！
+        String[] cookies = s.split(";");
+        String out = null;
+        for (String str : cookies) {
+            String[] cookie = str.split("=");
+            if (cookie[0].toString().equals("__test")) {
+                out = cookie[1].toString();
+            } else {
+                Log.i("ii", str + "不是需要的cookie");
+            }
+        }
+        return out;
     }
     public void setCh(String s){
         HttpHeaders headers = new HttpHeaders();//设置公共header所有的 header 都 不支持 中文

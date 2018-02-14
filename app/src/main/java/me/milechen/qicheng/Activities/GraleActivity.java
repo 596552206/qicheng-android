@@ -21,6 +21,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.lzy.okhttputils.callback.StringCallback;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.ArrayList;
@@ -52,16 +55,12 @@ public class GraleActivity extends AppCompatActivity implements GParasAdapter.On
     private ParaNetUtil paraNetUtil = new ParaNetUtil();
     private int status;
     private GroupNetUtil groupNetUtil = new GroupNetUtil();
-
-    private boolean isLoadingMore = false;
-    private boolean isNoMore = false;
-
-
     private Toolbar toolbar;
     private TextView title;
     private TextView tucao;
     public DiscussFragment discussFragment;
     private RecyclerView recyclerView;
+    private RefreshLayout refreshLayout;
     private LinearLayout hintBar;
     private TextView groupIdTV;
     private TextView groupInfoTV;
@@ -81,6 +80,7 @@ public class GraleActivity extends AppCompatActivity implements GParasAdapter.On
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         tucao = (TextView) findViewById(R.id.toolbar_right_tv);
         recyclerView = (RecyclerView) findViewById(R.id.grale_paras_rv);
+        refreshLayout = (RefreshLayout) findViewById(R.id.grale_paras_srl);
         hintBar = (LinearLayout) findViewById(R.id.grale_hintbar_l);
         groupIdTV = (TextView) findViewById(R.id.grale_id_tv);
         groupInfoTV = (TextView) findViewById(R.id.grale_info_tv);
@@ -100,6 +100,7 @@ public class GraleActivity extends AppCompatActivity implements GParasAdapter.On
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
         toolbar.setNavigationIcon(R.mipmap.back);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,26 +114,25 @@ public class GraleActivity extends AppCompatActivity implements GParasAdapter.On
         recyclerView.setAdapter(parasAdapter);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                int lastPosition = ((LinearLayoutManager)layoutManager).findLastVisibleItemPosition();
-                if(newState == RecyclerView.SCROLL_STATE_IDLE && lastPosition ==parasAdapter.getItemCount()-1){
-                    if(isLoadingMore){
-                    }
-                    if(!isLoadingMore){
-                        fetchParas(paras.get(paras.size()-1).getParanum(),3);
-                    }
-                }
-            }
 
+        refreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
+            public void onRefresh(RefreshLayout refreshlayout) {
+                refreshlayout.finishRefresh(2000);
+                Log.i("ii", "正在刷新");
+                paras.clear();
+                fetchParas((paras.size() == 0) ? 0 : (paras.get(paras.size() - 1).getParanum()), 10);
+                parasAdapter.notifyDataSetChanged();
             }
         });
-
+        refreshLayout.setOnLoadmoreListener(new OnLoadmoreListener() {
+            @Override
+            public void onLoadmore(RefreshLayout refreshlayout) {
+                refreshlayout.finishLoadmore(2000);
+                Log.i("ii", "正在加载");
+                fetchParas(paras.get(paras.size() - 1).getParanum(), 8);
+            }
+        });
 
         showBar();
         //fetchParas(0,10);
@@ -173,8 +173,6 @@ public class GraleActivity extends AppCompatActivity implements GParasAdapter.On
     }
 
     public void fetchParas(final int paraNumAfter, int limit) {
-        avi.smoothToShow();
-        isLoadingMore = true;
         paraNetUtil.fetchGPara(groupId, paraNumAfter, limit, new StringCallback() {
             @Override
             public void onSuccess(String s, Call call, Response response) {
@@ -183,16 +181,12 @@ public class GraleActivity extends AppCompatActivity implements GParasAdapter.On
                     public void onOK(int status, String detail, List<GParaBean> data) {
                         paras.addAll(data);
                         parasAdapter.notifyDataSetChanged();
-                        isLoadingMore = false;
-                        if(paraNumAfter!=0)layoutManager.smoothScrollToPosition(recyclerView,null,paraNumAfter);
-                        avi.smoothToHide();
+                        avi.hide();
 
                     }
 
                     @Override
                     public void onErr(int status, String detail) {
-                        isNoMore = true;
-                        isLoadingMore = false;
                         avi.hide();
                     }
                 });

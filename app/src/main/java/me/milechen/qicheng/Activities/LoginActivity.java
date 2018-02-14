@@ -62,6 +62,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         avatar = (SimpleDraweeView) findViewById(R.id.login_avatar_sdv);
         nick = (TextView) findViewById(R.id.login_nick_tv);
 
+        register.setOnClickListener(this);
+
         phone.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -131,7 +133,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void doLogin(){
         String phone = this.phone.getText().toString();
         String password = this.password.getText().toString();
-        if(password == null || phone == null){
+        if(password.length()==0 || phone.length()==0l){
             Toast.makeText(this,"请输入手机号和密码",Toast.LENGTH_LONG).show();
         }else if (!phone.substring(0,1).equals("1")){
             Toast.makeText(this,"请输入正确的手机号",Toast.LENGTH_LONG).show();
@@ -169,11 +171,21 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
+    private void goRegister(){
+        Intent intent = new Intent();
+        intent.setClass(LoginActivity.this,RegisterActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
     @Override
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.login_submit_btn:
                 doLogin();
+                break;
+            case R.id.login_register_tv:
+                goRegister();
                 break;
             default:
 

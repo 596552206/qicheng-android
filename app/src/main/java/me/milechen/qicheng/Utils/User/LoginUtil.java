@@ -41,7 +41,7 @@ public class LoginUtil {
         SharedPreferences.Editor editor = sp.edit();
         editor.putInt("id",user.getId());
         editor.putString("phone",user.getPhone());
-        editor.putString("phone",user.getPassword());
+        editor.putString("password", user.getPassword());
         editor.putString("nick",user.getNick());
         editor.putBoolean("gender",user.getGender());
         editor.putString("avatar",user.getAvatar());
@@ -52,6 +52,23 @@ public class LoginUtil {
         editor.commit();
 
         renewTime(context);
+    }
+
+    public static void logout(Context context) {
+        SharedPreferences sp = context.getSharedPreferences("user", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.remove("id");
+        editor.remove("phone");
+        editor.remove("password");
+        editor.remove("nick");
+        editor.remove("gender");
+        editor.remove("avatar");
+        editor.remove("accessibility");
+        editor.remove("zan");
+        editor.remove("level");
+        editor.remove("clientid");
+        editor.commit();
+
     }
 
 

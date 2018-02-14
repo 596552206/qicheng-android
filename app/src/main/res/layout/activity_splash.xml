@@ -13,5 +13,5 @@
 <WebView
         android:id="@+id/wbv_for_byet_cookie_invisible"
         android:layout_width="match_parent"
-        android:layout_height="10dp"></WebView>
+    android:layout_height="0dp"></WebView>
 </RelativeLayout>

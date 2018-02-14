@@ -18,6 +18,9 @@ import android.widget.Toast;
 
 import com.bigkoo.convenientbanner.listener.OnItemClickListener;
 import com.lzy.okhttputils.callback.StringCallback;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,11 +53,10 @@ import static android.support.v7.widget.RecyclerView.OnScrollListener;
 public class LatestMainFragment extends MainFragment implements OnItemClickListener, TaleListAdapter.MyItemClickListener {
 
 
-    private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
+    private RefreshLayout refreshLayout;
     private TaleListAdapter taleListAdapter;
     private ArrayList<TaleBean> latestTalesList = new ArrayList<TaleBean>();
-    private boolean isLoadingMore = false;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,10 +65,8 @@ public class LatestMainFragment extends MainFragment implements OnItemClickListe
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_heat_main, container, false);
-        //convenientBanner = new ConvenientBanner(getContext());
-        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.fgheat_srl);
+        refreshLayout = (RefreshLayout) view.findViewById(R.id.fgheat_srl);
         recyclerView = (RecyclerView) view.findViewById(R.id.fgheat_heat_rv);
         return view;
     }
@@ -77,22 +77,22 @@ public class LatestMainFragment extends MainFragment implements OnItemClickListe
 
         updateData(TimeManager.getInstance().getServiceTime());
 
-        swipeRefreshLayout.setColorSchemeResources(R.color.green,R.color.red,R.color.blue,R.color.violet);
-        swipeRefreshLayout.setSize(SwipeRefreshLayout.LARGE);
-        swipeRefreshLayout.setProgressBackgroundColor(R.color.light);
-        swipeRefreshLayout.setProgressViewEndTarget(true,100);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        refreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
-            public void onRefresh() {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        updateData(TimeManager.getInstance().getServiceTime());
-                    }
-                }).start();
+            public void onRefresh(RefreshLayout refreshlayout) {
+                refreshlayout.finishRefresh(2000);
+                Log.i("ii", "正在刷新");
+                updateData(TimeManager.getInstance().getServiceTime());
             }
         });
-
+        refreshLayout.setOnLoadmoreListener(new OnLoadmoreListener() {
+            @Override
+            public void onLoadmore(RefreshLayout refreshlayout) {
+                refreshlayout.finishLoadmore(2000);
+                Log.i("ii", "正在加载");
+                handler.sendEmptyMessageDelayed(3, 500);
+            }
+        });
 
         taleListAdapter = new TaleListAdapter(latestTalesList);
         taleListAdapter.setOnItemClickListener(this);
@@ -101,28 +101,6 @@ public class LatestMainFragment extends MainFragment implements OnItemClickListe
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(taleListAdapter);
         recyclerView.addItemDecoration(new RecyclerViewDivider(getContext(),LinearLayoutManager.HORIZONTAL,14,getResources().getColor(R.color.gray)));
-        recyclerView.addOnScrollListener(new OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                int lastPosition = ((LinearLayoutManager)layoutManager).findLastVisibleItemPosition();
-                if(newState == RecyclerView.SCROLL_STATE_IDLE && lastPosition ==taleListAdapter.getItemCount()-1){
-                    if(isLoadingMore){
-                        Log.i("ii","isLoading");
-                    }
-                    if(!isLoadingMore){
-                        Log.i("ii","notLoading");
-                        isLoadingMore = true;
-                        handler.sendEmptyMessageDelayed(3,500);
-                    }
-                }
-            }
-
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-            }
-        });
 
         ((MainActivity)getActivity()).handlerForLatestF = this.handler;
     }
@@ -131,7 +109,6 @@ public class LatestMainFragment extends MainFragment implements OnItemClickListe
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        //super.mListener.onFragmentInteractionTell();
     }
 
     @Override
@@ -147,7 +124,6 @@ public class LatestMainFragment extends MainFragment implements OnItemClickListe
 
     @Override
     public void onItemClick(View view, int pos) {
-        //Toast.makeText(getContext(),heatTalesList.get(pos).getId()+"isClicked",Toast.LENGTH_SHORT).show();
         Intent intent = new Intent();
         Bundle bundle = new Bundle();
         bundle.putInt("id",latestTalesList.get(pos).getId());
@@ -193,17 +169,14 @@ public class LatestMainFragment extends MainFragment implements OnItemClickListe
                     public void onOK(int status, String detail, List<TaleBean> data) {
                         for (TaleBean tale:data) {
                             latestTalesList.add(tale);
-                            //Log.i("ii",tale.getTagSet().get(0).getName());
                         }
                         taleListAdapter.notifyDataSetChanged();
-                        isLoadingMore = false;
                     }
 
                     @Override
                     public void onErr(int status, String detail) {
                         Log.i("ii", detail);
                         Toast.makeText(getContext(),"没有更多...",Toast.LENGTH_LONG).show();
-                        isLoadingMore = false;
                     }
                 });
             }
@@ -236,10 +209,7 @@ public class LatestMainFragment extends MainFragment implements OnItemClickListe
             super.handleMessage(msg);
             switch (msg.what) {
                 case 1://下拉
-                    //swipeRefreshLayout.setRefreshing(false);
                     taleListAdapter.notifyDataSetChanged();
-                    //swipeRefreshLayout.setEnabled(false);
-                    swipeRefreshLayout.setRefreshing(false);
                     break;
                 case 2:// Activity请求更新
                     updateData(TimeManager.getInstance().getServiceTime());
